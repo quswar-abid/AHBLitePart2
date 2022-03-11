@@ -17,15 +17,22 @@ Randomizable values are subject to constraints defined in the constraint block. 
 ### Addressable points:
 
 Q: Can I run predefined sequences? (e.g. reset sequence, random write sequence, random read/write bursts, a directed test)
+
 A: predef_sequence in the class constructor of the generator, with a default value of 0 can be used to send the required sequence. The sequence can be set to:
 0: for default (completely randomized with no constraints defined outside of transaction
+
 1: for random transactions with just write (hwrite=1’b1)
 2: for random transactions with just read (hwrite=1’b0)
 3: for random transactions with no constraint on read/write but is burst (trans=2’b11)
+
 Q: Can I debug easily if my test fails?
+
 A: This point is not covered yet!
-Q: Do I need one or multiple transactions for bursts?
+
+Q: Do I need one or multiple transactionsfor bursts?
+
 A: We need multiple transactions created in the generator and sent to the driver for bursts. But no additional configuration has to be made. Whenever the burst comes up, a separate routing is followed where the first transaction is manually set to NONSEQ, and the rest of the burst with SEQ in transfer type.
+
 
 ## Generator
 
@@ -36,9 +43,13 @@ Another important job of a generator is to send only the set number of transacti
 ### Addressable points:
 
 Q: How to control how many transactions get generated?
+
 A: Number of transactions is set in test program where the no. is passed on to all parts of an environment and not just the generator.
+
 Q: Sometimes random transactions are not needed. How do I generate non-random transactions when required?
+
 A: NO, but a task needs to be added for this purpose in the transaction class or generator class.
+
 
 ## Driver
 
@@ -49,11 +60,17 @@ Driver drives for the set number of transactions.
 ### Addressable points:
 
 Q: Are the interface signals driven according to the spec?
+
 A: YES
+
 Q: Does the transaction have proper address/data Phases?
+
 A: YES
+
 Q: Do I need to sample inputs to decide whether to drive outputs or not on the next clocking event?
+
 A: NOT YET
+
 
 
 
@@ -65,9 +82,13 @@ Monitor reads the address phase and samples the read/write data in the data phas
 ### Addressable points:
 
 Q: Are the interface signals sampled according to the spec?
+
 A: YES
+
 Q: Does the transaction have proper address/data Phases?
+
 A: YES
+
 
 
 
@@ -79,13 +100,22 @@ The reset states of both DUT and scoreboard’s memory are set to the same value
 ### Addressable points:
 
 Q: Does the scoreboard implement proper endianness?
+
 A: YES
+
 Q: How to change endianness if required?
+
 A: A variable (type bit) named endianness switches between the two. By default it is 0. It can be manually changed by editing in the code, and be sent through the class constructor. Again, in the constructor it is set to 0 (i.e. little endian) by default.
+
 Q: How to not compare reset values and to compare only those memory locations which have already been written?
+
+
 A: Using an associative array as the data structure of our scoreboard memory can make sure that only locations written to should be read.
+
 Q: Should scoreboard memory be static or dynamic?
+
 A: Dynamic memory is better than static memory due to the reason mentioned in the previous question’s answer.
+
 
 ## Environment
 
